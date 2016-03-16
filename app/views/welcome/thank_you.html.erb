@@ -1,0 +1,11 @@
+<p>Thank You</p>
+<p>Your Recent Posts Are...</p><br><br>
+
+<% index = 1 %>
+<% @posts.each do |post| %>
+	<p><%= index %>.</p>
+	<p>Message : <%= post["message"] %></p>
+	<%= image_tag post["picture"] if post["picture"].present? %>
+	<p>Date & Time : <%= post["created_time"] %></p><br>
+	<% index = index + 1 %>
+<% end %>
