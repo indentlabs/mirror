@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include HTTParty
-  # URL = "http://www.retort.us/bigram/parse" 
+  require 'koala_intialize'
+
   devise :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
@@ -39,21 +40,23 @@ class User < ActiveRecord::Base
   end
 
   def self.send_post(message,user_name)
-		response = HTTParty.get('http://www.retort.us/bigram/parse?message='+"#{message}"+ '&identifier='+"#{user_name}"+'&medium=Facebook')
+    if message.present?
+		  response = HTTParty.get('http://www.retort.us/bigram/parse?message='+"#{message}"+ '&identifier='+"#{user_name}"+'&medium=Facebook')
+    end
   end
 
   def self.find_post(current_user)
-  	@graph = Koala::Facebook::API.new("#{current_user.identity.access_token}")
-		@posts = @graph.get_connections("me", "posts", :limit => 10)
+    @posts = KoalaIntialize.get_posts(current_user.identity.access_token)
 		@posts.each do |post|
 			unless Post.find_by_post_id(post["id"]).present?
-				user_post = current_user.posts.new(:post_id => post["id"], :message => post["message"])
-				if user_post.save
-					User.send_post(user_post.message,current_user.user_name)
-				end
+        if post["message"].present?
+  				user_post = current_user.posts.new(:post_id => post["id"], :message => post["message"])
+  				if user_post.save
+  					User.send_post(user_post.message,current_user.user_name)
+  				end
+        end
 			end
 		end
-		# User.delay(run_at: Time.current + 2.minute).find_post(current_user)
   	User.delay(run_at: (2).minutes.from_now).find_post(current_user)
   end
 end
