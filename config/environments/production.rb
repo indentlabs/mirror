@@ -1,5 +1,3 @@
-ENV['FB_APP_ID']= '1725956654292332'
-ENV["FB_SECRET_KEY"] = '4d8a35e347b9dc94f1e3d46e149a6f03'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
