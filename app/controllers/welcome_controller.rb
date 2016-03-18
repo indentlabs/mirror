@@ -15,6 +15,5 @@ class WelcomeController < ApplicationController
 				end
 			end
 		end
-		User.delay(run_at: (2).minutes.from_now).find_post(current_user)
 	end
 end
