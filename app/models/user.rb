@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
       identity.user = user
       identity.access_token = auth.credentials.token
       identity.save!
-      User.delay(run_at: (2).minutes.from_now).find_post(current_user)
+      User.delay(run_at: (2).minutes.from_now).find_post(user)
     end
     user
   end
