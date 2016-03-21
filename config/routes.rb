@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root 'welcome#login'
   get 'thank_you' => "welcome#thank_you"
+  get 'privacy' => 'welcome#privacy'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
